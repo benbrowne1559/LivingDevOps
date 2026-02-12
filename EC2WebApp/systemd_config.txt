@@ -1,0 +1,18 @@
+[Unit]
+Description=MWeb App
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/LivingDevOps/EC2WebApp
+ExecStart=start_app.sh
+Restart=always
+RestartSec=10
+
+# Optional: Logging
+StandardOutput=append:/var/log/webapp.log
+StandardError=append:/var/log/webapp.log
+
+[Install]
+WantedBy=multi-user.target

@@ -45,10 +45,4 @@ else
     echo -e "${GREEN}Requirements already installed${NC}"
 fi
 
-# Start the application with gunicorn
-echo -e "${GREEN}Starting application with Gunicorn...${NC}"
-echo -e "${BLUE}Access the app at: http://localhost:$PORT${NC}"
-echo -e "${BLUE}Press Ctrl+C to stop the server${NC}"
-echo ""
-
 gunicorn -w $WORKERS -b $HOST:$PORT $APP_MODULE
