@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=ec2-user
 WorkingDirectory=/home/ec2-user/LivingDevOps/EC2WebApp
-ExecStart=start_app.sh
+ExecStart=/home/ec2-user/LivingDevOps/EC2WebApp/start_app.sh
 Restart=always
 RestartSec=10
 
