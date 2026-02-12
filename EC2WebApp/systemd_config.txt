@@ -1,5 +1,5 @@
 [Unit]
-Description=MWeb App
+Description=Web App
 After=network.target
 
 [Service]
@@ -11,8 +11,8 @@ Restart=always
 RestartSec=10
 
 # Optional: Logging
-StandardOutput=append:/var/log/webapp.log
-StandardError=append:/var/log/webapp.log
+StandardOutput=append:/var/log/ec2webapp.log
+StandardError=append:/var/log/ec2webapp.log
 
 [Install]
 WantedBy=multi-user.target
