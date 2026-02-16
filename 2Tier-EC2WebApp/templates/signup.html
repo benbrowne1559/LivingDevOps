@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Ben Browne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('signup') }}">Sign Up</a>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Newsletter Sign-Up</h1>
+            <p class="subtitle">Stay updated with my DevOps journey</p>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="form-section">
+            <h2>Subscribe</h2>
+            <form method="POST" action="{{ url_for('signup') }}">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+        <section class="subscribers-section">
+            <h2>Current Subscribers</h2>
+            {% if subscribers %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subscriber in subscribers %}
+                        <tr>
+                            <td>{{ subscriber.id }}</td>
+                            <td>{{ subscriber.name }}</td>
+                            <td>{{ subscriber.email }}</td>
+                            <td>{{ subscriber.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-data">No subscribers yet. Be the first!</p>
+            {% endif %}
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Ben Browne. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
