@@ -10,7 +10,7 @@ import json
 
 def get_secret():
 
-    secret_name = "public/postgresdb"
+    secret_name = "private/postgresdb"
     region_name = "eu-north-1"
 
     # Create a Secrets Manager client
