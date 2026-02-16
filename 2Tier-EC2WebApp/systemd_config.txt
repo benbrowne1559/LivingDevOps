@@ -1,12 +1,12 @@
 [Unit]
-Description=Web App
+Description=Web App with DB
 After=network.target
 
 [Service]
 Type=simple
 User=ec2-user
-WorkingDirectory=/home/ec2-user/LivingDevOps/EC2WebApp
-ExecStart=/home/ec2-user/LivingDevOps/EC2WebApp/start_app.sh
+WorkingDirectory=/home/ec2-user/LivingDevOps/2Tier-EC2WebApp
+ExecStart=/home/ec2-user/LivingDevOps/2Tier-EC2WebApp/start_app.sh
 Restart=always
 RestartSec=10
 
