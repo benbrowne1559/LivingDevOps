@@ -10,8 +10,8 @@ import json
 
 def get_secret():
 
-    secret_name = "private/postgresdb"
-    region_name = "eu-north-1"
+    secret_name = os.getenv('SECRET_NAME')
+    region_name = os.getenv('AWS_REGION')
 
     # Create a Secrets Manager client
     session = boto3.session.Session()

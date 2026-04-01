@@ -1,5 +1,7 @@
 terraform {
 
+  required_version = "~> 1.14"
+
   cloud {
     organization = "benbrowne_org"
     workspaces {
@@ -20,11 +22,4 @@ terraform {
 provider "aws" {
   region = var.region
 
-  assume_role {
-    # The ARN of the role you want the CLI to assume
-    role_arn = "arn:aws:iam::628132821277:role/2Tier-WebApp-Terraform"
-
-    # Optional: A session name for CloudTrail logs
-    session_name = "TerraformSesh"
-  }
 }

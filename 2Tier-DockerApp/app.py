@@ -10,8 +10,8 @@ import json
 
 def get_secret():
 
-    secret_name = "private/postgresdb"
-    region_name = "eu-north-1"
+    secret_name = "rds!db-3ad421d6-effb-4a19-9b65-99747a538a8b"
+    region_name = "eu-west-2"
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
@@ -31,16 +31,15 @@ def get_secret():
 
     secret = json.loads(get_secret_value_response['SecretString'])
     password = secret['password'] 
-    host = secret['host']
 
-    return password, host
+    return password
 
 load_dotenv('postgres.env')
-password, host = get_secret()
+password = get_secret()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('DB_USER')}:{password}@{host}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+##app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('DB_USER')}:{password}@{os.getenv('HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

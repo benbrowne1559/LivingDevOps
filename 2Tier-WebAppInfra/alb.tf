@@ -1,36 +1,65 @@
-# Create a new load balancer
-resource "aws_elb" "webapp-alb" {
-  name               = "webapp-elb"
-  availability_zones = ["eu-west-2a", "eu-west-2a"]
+# App Load balancer
+resource "aws_lb" "webapp-alb" {
+  name               = "webapp-alb"
+  internal           = false
+  load_balancer_type = "application"
+  subnets            = [aws_subnet.public1-sn.id, aws_subnet.public2-sn.id]
+  security_groups = [aws_security_group.allow-inbound-elb-sg.id]
 
-  access_logs {
-    bucket        = "foo"
-    bucket_prefix = "bar"
-    interval      = 60
+  tags = {
+    Environment = "production"
   }
+}
 
-  listener {
-    instance_port     = 5000
-    instance_protocol = "http"
-    lb_port           = 80
-    lb_protocol       = "http"
-  }
+resource "aws_lb_listener" "http-listener" {
+  load_balancer_arn = aws_lb.webapp-alb.id
+  port              = "80"
+  protocol          = "HTTP"
 
-  listener {
-    instance_port      = 5000
-    instance_protocol  = "http"
-    lb_port            = 443
-    lb_protocol        = "https"
-    ssl_certificate_id = "arn:aws:acm:eu-north-1:628132821277:certificate/6b9401a9-f8e3-4e42-ad7d-3ae6bd7d64c0"
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
+}
+
+resource "aws_lb_listener" "https-listener" {
+  load_balancer_arn = aws_lb.webapp-alb.id
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.ssl_cert
+
+  default_action {
+    type = "forward"
+
+    forward {
+      target_group {
+        arn = aws_lb_target_group.ecs-tg.arn
+      }
+    }
+  }
+}
+
+
+# IP Target Group
+
+resource "aws_lb_target_group" "ecs-tg" {
+  name        = "webapp-alb-tg"
+  port        = 5000
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.webapp-vpc.id
 
   health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 3
-    target              = "HTTP:5000/"
-    interval            = 30
+    enabled           = true
+    path = "/"
+    healthy_threshold = 2
   }
 
-  tags = var.tags
+
 }
